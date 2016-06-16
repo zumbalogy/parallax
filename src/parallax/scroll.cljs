@@ -4,7 +4,9 @@
 (def position (r/atom 0))
 
 (defn update-position [e]
-  (swap! position + (.-deltaY e)))
+  (let [delta (.-deltaY e)
+        new-pos (max 0 (+ @position delta))]
+    (reset! position new-pos)))
 
 (defn init! []
   (let [doc (.-documentElement js/document)]

@@ -1,11 +1,10 @@
 (ns parallax.core
   (:require [reagent.core :as r]
-            [parallax.scroll :as scroll]))
-
-(def poem-data ["hello" "wolf" "sdf"])
+            [parallax.scroll :as scroll]
+            [parallax.poem :as poem]))
 
 (defn poem []
   (let [pos (int (/ @scroll/position 200))]
-    [:div [:p pos]]))
+    [:div [:p (nth poem/raw-text pos)]]))
 
 (r/render-component [poem] (js/document.getElementById "app"))
