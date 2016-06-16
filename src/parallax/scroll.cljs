@@ -6,5 +6,9 @@
 (defn update-position [e]
   (swap! position + (.-deltaY e)))
 
-(defn listen! []
-  (.addEventListener (.-documentElement js/document) "mousewheel" update-position))
+(defn init! []
+  (let [doc (.-documentElement js/document)]
+    (when-not (.-onmousewheel doc)
+      (set! (.-onmousewheel doc) update-position))))
+
+(init!)
