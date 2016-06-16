@@ -3,8 +3,8 @@
             [parallax.scroll :as scroll]
             [parallax.poem :as poem]))
 
-(defn poem []
-  (let [pos (Math/abs (int (/ @scroll/position 200)))]
-    [:div [:p (nth poem/raw-text pos)]]))
+(defn page []
+  (let [pos (scroll/scale-pos @scroll/position)]
+    [:div (poem/build-text pos)]))
 
-(r/render-component [poem] (js/document.getElementById "app"))
+(r/render-component [page] (js/document.getElementById "app"))
