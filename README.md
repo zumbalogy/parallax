@@ -1,5 +1,8 @@
 # parallax
 
+## TODO
+  [somewhat] linkable/refreshable urls/localstorage?
+
 ## Setup
 
 To get an interactive development environment run:
