@@ -1,22 +1,20 @@
 (ns parallax.poem)
 
-(def br [:br])
-
 (defn paragraph [& args]
   (map-indexed (fn [i x] [:p {:key i} x]) args))
 
-(defn c [& args]
-  (cycle args))
-
 (defn scale [a b]
-  (Math/abs (int (/ a b))))
+  (Math/abs (quot a b)))
 
-(defn rand-pick [speed & args]
-  (let [time (.getTime (js/Date.))
-        len (count args)
-        seed (* (inc len) (int (/ time speed)))
-        modded (mod seed len)]
-    (nth args modded)))
+(defn grabber
+  ; TODO: better as macro maybe
+  ([x]
+    (fn [& args]
+      (nth args (mod x (count args)))))
+  ([x func]
+    (fn [z & args]
+      (if-let [result (func x z)]
+        (nth args (mod result (count args)))))))
 
 ; TODO: if args have a length of one, most the helper functions should apply maybe
 
@@ -25,21 +23,16 @@
 
 (defn build-text [x]
   (let [n (scale x 200)
-        nnth (fn [& args] (nth (cycle args) n))
-        xth (fn [s & args] (nnth (scale x s)))
-        nmod (fn [m & args] (nnth (mod n m)))
-        btwn (fn [a b & args] (when (<= a n b) (apply nnth args)))]
+        nnth (grabber n)
+        xth (grabber x scale)
+        btwn (grabber n (fn [a [b c]] (<= b a c)))
+        rand-pick (grabber x #(quot (.getTime (js/Date.)) %2))]
     [:div (paragraph
+      (str "raw " x)
+      (str "scaled " n)
       (str "this is a "
         (xth 500 "scrolling" (xth 100 "cool" "c00l") "good" "hard to read")
         " "
         (rand-pick 2000 "poem" "message" "story"))
-      (nnth "part" "2" "electirc bugaloo")
-      (nnth [:div "testing p"])
-      (nnth "a" "b" (rand-nth ["x" "y"]))
-      (nnth "a" "b" (rand-pick 2000 "x" "y"))
-      (str "i am more of a "
-        (get ["morning" "night" "morning" "night" "boring"] n)
-        " person")
-      (btwn 0 50 "this is the start")
-      (btwn 50 100 "chapter 2" "chapter 2.1"))]))
+      (btwn [0 30] "this is the start")
+      )]))

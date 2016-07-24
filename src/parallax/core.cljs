@@ -4,8 +4,6 @@
             [parallax.poem :as poem]))
 
 (defn page []
-    [:div
-      [:p "raw: " @scroll/position]
-      (poem/build-text @scroll/position)])
+    [:div (poem/build-text @scroll/position)])
 
 (r/render-component [page] (js/document.getElementById "app"))
