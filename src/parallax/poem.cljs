@@ -26,7 +26,7 @@
         btwn (grabber n (fn [a [b c]] (<= b a c)))
         blink (grabber n #(if (even? (quot %1 %2)) %1))
         rand-pick (grabber n #(quot (.getTime (js/Date.)) %2))
-        ]
+        get-from (fn [start & args] (nth args (- n start) nil))]
     [:div (paragraph
       (str "raw " x)
       (str "scaled " n)
@@ -37,5 +37,14 @@
           (rand-pick 2000 "poem" "message" "story"))
           [:br]
           "this is the start. scroll to read"])
-      (blink 2 "this should blink")
+      ; (blink 2 "this should blink")
+      ; (btwn [15 40]
+      (get-from 20 1 2 3 4 5)
+      (btwn [0 40]
+        (str "I am on this new sea food diet: "
+          (nnth "" "I only eat sea food"
+                   (str "I eat food that begins with the letter C " (xth 50 "" "(like crabs)" "(like calimari)" "(like caviar)"))
+                   (str "I only eat food the shape of a C " (xth 60 "" "(like clams)" "(like shrimp)"))
+                   "I only eat food that evolved from the sea")))
+      
       )]))
