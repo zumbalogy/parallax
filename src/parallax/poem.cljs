@@ -16,8 +16,6 @@
       (if-let [result (func x z)]
         (nth args (mod result (count args)))))))
 
-; TODO: if args have a length of one, most the helper functions should apply maybe
-
 ; TODO: helper for building thing that types out something letter[/word?] at a time like a typewriter
 ; and also one for deleting them
 
