@@ -1,7 +1,7 @@
 (ns parallax.poem)
 
 (defn paragraph [& args]
-  (map-indexed (fn [i x] [:p {:key i} x]) args))
+  (map-indexed (fn [i x] [:div {:key i} x]) args))
 
 (defn scale [a b]
   (Math/abs (quot a b)))
@@ -24,13 +24,18 @@
         nnth (grabber n)
         xth (grabber x scale)
         btwn (grabber n (fn [a [b c]] (<= b a c)))
-        rand-pick (grabber x #(quot (.getTime (js/Date.)) %2))]
+        blink (grabber n #(if (even? (quot %1 %2)) %1))
+        rand-pick (grabber n #(quot (.getTime (js/Date.)) %2))
+        ]
     [:div (paragraph
       (str "raw " x)
       (str "scaled " n)
-      (str "this is a "
-        (xth 500 "scrolling" (xth 100 "cool" "c00l") "good" "hard to read")
-        " "
-        (rand-pick 2000 "poem" "message" "story"))
-      (btwn [0 30] "this is the start")
+      (btwn [0 15]
+        [:div (str "this is a "
+          (xth 500 "scrolling" (xth 20 "cool" "c0ool" "c00ol" "c000l" "c0000l" "co000l" "co00l" "coo0l" "cool") "good" "hard to read")
+          " "
+          (rand-pick 2000 "poem" "message" "story"))
+          [:br]
+          "this is the start. scroll to read"])
+      (blink 2 "this should blink")
       )]))
